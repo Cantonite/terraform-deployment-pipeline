@@ -11,7 +11,7 @@ terraform {
 }
 
 module "this" {
-  source = "./terraform/template"
+  source = "../template"
 
   message = "Hello, Development World!"
 }
