@@ -72,7 +72,7 @@ jobs:
         run: terraform init -input=false
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false -auto-approve -var-file="environments/development.tfvars"
+        run: terraform apply -input=false development.tfplan
 
   # deploy-development:
   #   name: Deploy Development
