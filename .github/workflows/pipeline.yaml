@@ -83,7 +83,7 @@ jobs:
       TF_WORKSPACE: staging
       TF_IN_AUTOMATION: true
     needs:
-      - ci
+      - development
     environment:
       name: staging
       url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-staging
@@ -110,7 +110,7 @@ jobs:
       TF_WORKSPACE: production
       TF_IN_AUTOMATION: true
     needs:
-      - ci
+      - staging
     environment:
       name: production
       url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-production
