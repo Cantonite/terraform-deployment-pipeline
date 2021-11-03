@@ -36,12 +36,14 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan -var-file="environments/${{ matrix.environment }}.tfvars" -out=${{ matrix.environment }}.tfplan
-      - name: Upload Plan Artifact
-        id: artifact
+      - name: Upload Init Artifact
+        id: artifact-upload
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.environment }}-tfplan
-          path: ./terraform/${{ matrix.environment }}.tfplan
+          name: ${{ matrix.environment }}-terraform-build
+          path: |
+            ./terraform/.terraform/
+            ./terraform/${{ matrix.environment }}.tfplan
           retention-days: 1
           if-no-files-found: error
 
@@ -63,12 +65,9 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: development-tfplan
+          name: development-terraform-build
           path: ./terraform/development.tfplan
       - name: Terraform Apply
         id: apply
@@ -92,12 +91,9 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: staging-tfplan
+          name: staging-terraform-build
           path: ./terraform/staging.tfplan
       - name: Terraform Apply
         id: apply
@@ -121,12 +117,9 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: production-tfplan
+          name: production-terraform-build
           path: ./terraform/production.tfplan
       - name: Terraform Apply
         id: apply
