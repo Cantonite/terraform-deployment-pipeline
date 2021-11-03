@@ -1,1 +1,1 @@
-message="Hello, Staging World!"
+message = "Hello, Staging World!"
