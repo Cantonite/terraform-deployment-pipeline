@@ -35,7 +35,7 @@ jobs:
         run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=${{ matrix.environment }}.tfplan
+        run: terraform plan -var-file="environments/${{ matrix.environment }}.tfvars" -out=${{ matrix.environment }}.tfplan
       - name: Upload Plan Artifact
         id: artifact
         uses: actions/upload-artifact@v2
@@ -43,6 +43,7 @@ jobs:
           name: ${{ matrix.environment }}-tfplan
           path: ${{ matrix.environment }}.tfplan
           retention-days: 5
+          if-no-files-found: fail
 
   # deploy-development:
   #   name: Deploy Development
