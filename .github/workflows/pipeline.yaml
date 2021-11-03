@@ -42,7 +42,7 @@ jobs:
         with:
           name: ${{ matrix.environment }}-terraform-build
           path: |
-            ./terraform/.terraform/
+            ./terraform/.terraform/**
             ./terraform/${{ matrix.environment }}.tfplan
           retention-days: 1
           if-no-files-found: error
@@ -72,6 +72,7 @@ jobs:
           path: ./terraform
       - run: ls -la
       - run: ls -la ..
+      - run: ls -la .terraform
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/development.tfvars"
