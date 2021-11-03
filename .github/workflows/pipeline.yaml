@@ -68,7 +68,7 @@ jobs:
         run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: development-plan
+          name: development-tfplan
           path: ./terraform/development.tfplan
       - name: Terraform Apply
         id: apply
@@ -97,7 +97,7 @@ jobs:
         run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: staging-plan
+          name: staging-tfplan
           path: ./terraform/staging.tfplan
       - name: Terraform Apply
         id: apply
@@ -126,7 +126,7 @@ jobs:
         run: terraform init
       - uses: actions/download-artifact@v2
         with:
-          name: production-plan
+          name: production-tfplan
           path: ./terraform/production.tfplan
       - name: Terraform Apply
         id: apply
