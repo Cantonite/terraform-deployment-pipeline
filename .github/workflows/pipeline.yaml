@@ -13,8 +13,9 @@ jobs:
           - development
           - staging
           - production
-    env:
-      TF_DATA_DIR: /terraform/environments/${{ matrix.environments }}
+    defaults:
+      run:
+        working-directory: ./terraform/environments/${{ matrix.environments }}
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
