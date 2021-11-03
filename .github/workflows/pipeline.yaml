@@ -36,7 +36,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan -var-file="environments/${{ matrix.environment }}.tfvars" -out=${{ matrix.environment }}.tfplan
-      - name: Upload Init Artifact
+      - name: Upload Artifacts
         id: artifact-upload
         uses: actions/upload-artifact@v2
         with:
@@ -65,10 +65,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - uses: actions/download-artifact@v2
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
           name: development-terraform-build
-          path: ./terraform/development.tfplan
+          path: ./terraform
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/development.tfvars"
@@ -91,10 +92,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - uses: actions/download-artifact@v2
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
           name: staging-terraform-build
-          path: ./terraform/staging.tfplan
+          path: ./terraform
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/staging.tfvars"
@@ -117,10 +119,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - uses: actions/download-artifact@v2
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
           name: production-terraform-build
-          path: ./terraform/production.tfplan
+          path: ./terraform
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/production.tfvars"
