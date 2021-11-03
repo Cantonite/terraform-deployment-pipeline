@@ -37,12 +37,15 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan -input=false -var-file="environments/${{ matrix.environment }}.tfvars" -out=${{ matrix.environment }}.tfplan
+      - name: Tar files
+        id: tar
+        run: tar -cvf ${{ matrix.environment }}.tar .terraform .terraform.lock.hcl ${{ matrix.environment }}.tfplan
       - name: Upload Artifacts
         id: artifact-upload
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.environment }}-terraform-build
-          path: ./terraform/**
+          path: ./${{ matrix.environment }}.tar
           retention-days: 1
           if-no-files-found: error
 
@@ -62,6 +65,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: development-terraform-build
+      - name: Extract Tar
+        id: tar
+        run: tar -xf development.tar
       - run: ls -Rla
       - uses: hashicorp/setup-terraform@v1
         with:
@@ -71,7 +77,7 @@ jobs:
         run: terraform init -input=false
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false development.tfplan .
+        run: terraform apply -input=false development.tfplan
 
   # deploy-development:
   #   name: Deploy Development
