@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environments:
+        environment:
           - development
           - staging
           - production
@@ -24,10 +24,13 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        continue-on-error: true
+        continue-on-error: false
+      - name: Terraform Workspace
+        id: workspace
+        run: terraform workspace select ${{ matrix.environment }}
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="workspaces=[{name=terraform-deployment-pipeline-development}]"
+        run: terraform init
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color

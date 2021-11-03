@@ -15,5 +15,9 @@ terraform {
 
   backend "remote" {
     organization = "Cantonite"
+
+    workspaces {
+      prefix = "terraform-deployment-pipeline-"
+    }
   }
 }
