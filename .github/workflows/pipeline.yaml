@@ -15,51 +15,48 @@ jobs:
           - production
     defaults:
       run:
-        working-directory: ./terraform/environments/${{ matrix.environments }}
+        working-directory: ./terraform/template
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-
       - name: Terraform Init
         id: init
-        run: terraform init
-
+        run: terraform init -backend-config="workspaces.name=terraform-deployment-pipeline-development"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-  deploy-development:
-    name: Deploy Development
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform/environments/development
-    needs:
-      - ci
-    environment: 
-      name: development
-      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
-    steps:
-      - uses: actions/checkout@v2
-      - uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve
 
+  # deploy-development:
+  #   name: Deploy Development
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./terraform/environments/development
+  #   needs:
+  #     - ci
+  #   environment: 
+  #     name: development
+  #     url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: hashicorp/setup-terraform@v1
+  #       with:
+  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #     - name: Terraform Init
+  #       id: init
+  #       run: terraform init
+  #     - name: Terraform Plan
+  #       id: plan
+  #       run: terraform plan
+  #     - name: Terraform Apply
+  #       id: apply
+  #       run: terraform apply -auto-approve
 
   # deploy-staging:
   #   name: Deploy Staging
