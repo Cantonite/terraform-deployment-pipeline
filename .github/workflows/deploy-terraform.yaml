@@ -1,0 +1,43 @@
+name: Reusable Terraform Deployment Workflow
+
+on:
+  workflow_call:
+    # inputs:
+    #   environment:
+    #     required: true
+    #     type: string
+    # secrets:
+    #   token:
+    #     required: true
+
+jobs:
+  deploy-development:
+    name: Deploy Development
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: development
+      TF_WORKSPACE: development
+      TF_IN_AUTOMATION: true
+    # needs:
+    #   - ci
+    environment:
+      name: ${{ env.ENVIRONMENT }}
+      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: development-terraform-build
+      - name: Extract Tar
+        id: tar
+        run: tar -xvf development.tar
+      - run: ls -Rla
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -input=false development.tfplan
