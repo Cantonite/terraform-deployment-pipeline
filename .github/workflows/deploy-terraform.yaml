@@ -36,4 +36,14 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false development.tfplan
+        run: terraform apply -input=false development.tfplan > output.txt 2>&1
+      - name: Upload Logs
+        id: artifact-upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            output.txt
+            crash.*.log
+          retention-days: 1
+          if-no-files-found: error
