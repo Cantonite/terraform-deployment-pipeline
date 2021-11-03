@@ -69,7 +69,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: development-terraform-build
-          path: ./terraform
+          path: .
+      - run: ls -la
+      - run: ls -la ..
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/development.tfvars"
@@ -96,7 +98,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: staging-terraform-build
-          path: ./terraform
+          path: .
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/staging.tfvars"
@@ -123,7 +125,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: production-terraform-build
-          path: ./terraform
+          path: .
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve -var-file="environments/production.tfvars"
