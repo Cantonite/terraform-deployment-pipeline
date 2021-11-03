@@ -1,0 +1,17 @@
+terraform {
+  required_version = "1.0.9"
+
+  backend "remote" {
+    organization = "Cantonite"
+
+    workspaces {
+      name = "terraform-deployment-pipeline-staging"
+    }
+  }
+}
+
+module "this" {
+  source = "../template"
+
+  message = "Hello, Staging World!"
+}
