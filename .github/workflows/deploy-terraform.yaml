@@ -36,7 +36,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false development.tfplan > output.txt 2>&1
+        run: terraform apply -input=false development.tfplan > output.txt 2>&1 || true
       - name: Upload Logs
         id: artifact-upload
         uses: actions/upload-artifact@v2
