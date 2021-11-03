@@ -28,6 +28,9 @@ jobs:
   deploy-development:
     name: Deploy Development
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/template
     needs:
       - ci
     environment: 
@@ -40,4 +43,4 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform Plan
         id: plan
-        run: terraform plan
+        run: terraform plan -var-file=./.github/workflows/data/environments/development.json
