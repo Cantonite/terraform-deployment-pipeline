@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.environment }}-terraform-build
-          path: ./${{ matrix.environment }}.tar
+          path: ./terraform/${{ matrix.environment }}.tar
           retention-days: 1
           if-no-files-found: error
 
