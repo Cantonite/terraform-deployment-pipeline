@@ -50,121 +50,82 @@ jobs:
           if-no-files-found: error
 
   deploy-development:
-    uses: Cantonite/terraform-deployment-pipeline/.github/workflows/deploy-terraform.yaml@main
+    name: Deploy Development
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: development
+      TF_IN_AUTOMATION: true
     needs:
       - ci
+    environment:
+      name: development
+      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: development-terraform-build
+      - name: Extract Tar
+        id: tar
+        run: tar -xvf development.tar
+      - run: ls -Rla
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -input=false development.tfplan
 
-  # deploy-development:
-  #   name: Deploy Development
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     ENVIRONMENT: development
-  #     TF_WORKSPACE: development
-  #     TF_IN_AUTOMATION: true
-  #   needs:
-  #     - ci
-  #   environment:
-  #     name: development
-  #     url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
-  #   steps:
-  #     - name: Download Artifacts
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: development-terraform-build
-  #     - name: Extract Tar
-  #       id: tar
-  #       run: tar -xvf development.tar
-  #     - run: ls -Rla
-  #     - uses: hashicorp/setup-terraform@v1
-  #       with:
-  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply -input=false development.tfplan
+  deploy-staging:
+    name: Deploy staging
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: staging
+      TF_IN_AUTOMATION: true
+    needs:
+      - ci
+    environment:
+      name: staging
+      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-staging
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: staging-terraform-build
+      - name: Extract Tar
+        id: tar
+        run: tar -xvf staging.tar
+      - run: ls -Rla
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -input=false staging.tfplan
 
-  # deploy-development:
-  #   name: Deploy Development
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     TF_WORKSPACE: development
-  #     TF_IN_AUTOMATION: true
-  #   defaults:
-  #     run:
-  #       working-directory: ./terraform
-  #   needs:
-  #     - ci
-  #   environment: 
-  #     name: development
-  #     url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: hashicorp/setup-terraform@v1
-  #       with:
-  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  #     - name: Download Artifacts
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: development-terraform-build
-  #         path: ./terraform
-  #     - run: ls -Rla
-  #     - run: cat .terraform/terraform.tfstate
-  #     - run: ls -la .terraform/providers
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply -auto-approve -var-file="environments/development.tfvars"
-
-  # deploy-staging:
-  #   name: Deploy Staging
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     TF_WORKSPACE: staging
-  #     TF_IN_AUTOMATION: true
-  #   defaults:
-  #     run:
-  #       working-directory: ./terraform
-  #   needs:
-  #     - deploy-development
-  #   environment: 
-  #     name: staging
-  #     url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-staging
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: hashicorp/setup-terraform@v1
-  #       with:
-  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  #     - name: Download Artifacts
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: staging-terraform-build
-  #         path: ./terraform
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply -auto-approve -var-file="environments/staging.tfvars"
-
-  # deploy-production:
-  #   name: Deploy Production
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     TF_WORKSPACE: production
-  #     TF_IN_AUTOMATION: true
-  #   defaults:
-  #     run:
-  #       working-directory: ./terraform
-  #   needs:
-  #     - deploy-staging
-  #   environment: 
-  #     name: production
-  #     url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-production
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: hashicorp/setup-terraform@v1
-  #       with:
-  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  #     - name: Download Artifacts
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: production-terraform-build
-  #         path: ./terraform
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply -auto-approve -var-file="environments/production.tfvars"
+  deploy-production:
+    name: Deploy production
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: production
+      TF_IN_AUTOMATION: true
+    needs:
+      - ci
+    environment:
+      name: production
+      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-production
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: production-terraform-build
+      - name: Extract Tar
+        id: tar
+        run: tar -xvf production.tar
+      - run: ls -Rla
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -input=false production.tfplan
