@@ -11,5 +11,5 @@ terraform {
 }
 
 module "this" {
-  source = "./../template"
+  source = "./terraform/template"
 }
