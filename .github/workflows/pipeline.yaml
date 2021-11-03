@@ -17,7 +17,7 @@ jobs:
           - production
     defaults:
       run:
-        working-directory: ./terraform/template
+        working-directory: ./terraform
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
