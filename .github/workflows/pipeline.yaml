@@ -46,4 +46,4 @@ jobs:
         run: terraform init
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var-file=../../.github/workflows/data/environments/development.json
+        run: terraform plan
