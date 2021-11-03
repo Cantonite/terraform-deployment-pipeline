@@ -7,6 +7,8 @@ jobs:
   ci:
     name: Continuous Integration
     runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: ${{ matrix.environment }}
     strategy:
       matrix:
         environment:
@@ -25,9 +27,6 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: false
-      - name: Terraform Workspace
-        id: workspace
-        run: terraform workspace select ${{ matrix.environment }}
       - name: Terraform Init
         id: init
         run: terraform init
