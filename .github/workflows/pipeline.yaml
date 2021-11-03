@@ -44,6 +44,7 @@ jobs:
           name: ${{ matrix.environment }}-terraform-build
           path: |
             ./terraform/.terraform/**
+            ./terraform/.terraform.lock.hcl
             ./terraform/${{ matrix.environment }}.tfplan
           retention-days: 1
           if-no-files-found: error
