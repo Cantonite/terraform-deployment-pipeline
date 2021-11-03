@@ -15,13 +15,12 @@ jobs:
     name: Deploy Development
     runs-on: ubuntu-latest
     env:
-      ENVIRONMENT: development
       TF_WORKSPACE: development
       TF_IN_AUTOMATION: true
     # needs:
     #   - ci
     environment:
-      name: ${{ env.ENVIRONMENT }}
+      name: development
       url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
     steps:
       - name: Download Artifacts
