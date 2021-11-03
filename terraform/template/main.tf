@@ -13,7 +13,7 @@ output "hello_world_message" {
 }
 
 terraform {
-  required_version = "1.0.9"
+  required_version = "1.0.10"
 
   backend "remote" {
     organization = "Cantonite"
