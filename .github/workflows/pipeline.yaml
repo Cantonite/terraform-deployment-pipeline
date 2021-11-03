@@ -37,7 +37,6 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan -input=false -var-file="environments/${{ matrix.environment }}.tfvars" -out=${{ matrix.environment }}.tfplan
-      - run: ls -Rla
       - name: Upload Artifacts
         id: artifact-upload
         uses: actions/upload-artifact@v2
@@ -72,7 +71,7 @@ jobs:
         run: terraform init -input=false
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false development.tfplan
+        run: terraform apply -input=false development.tfplan .
 
   # deploy-development:
   #   name: Deploy Development
