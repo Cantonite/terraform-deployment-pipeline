@@ -7,6 +7,15 @@ jobs:
   ci:
     name: Continuous Integration
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environments:
+          - development
+          - staging
+          - production
+    defaults:
+      run:
+        working-directory: ./terraform/environments/${{ matrix.environments }}
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
