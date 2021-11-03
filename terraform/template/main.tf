@@ -4,9 +4,6 @@ variable "message" {
 }
 
 resource "null_resource" "null" {
-  triggers = {
-    value = timestamp()
-  }
 }
 
 output "hello_world_message" {
