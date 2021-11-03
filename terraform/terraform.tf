@@ -5,11 +5,7 @@ terraform {
     organization = "Cantonite"
 
     workspaces {
-      name = "terraform-deployment-pipeline-production"
+      prefix = "terraform-deployment-pipeline-"
     }
   }
-}
-
-module "this" {
-  source = "../../template"
 }
