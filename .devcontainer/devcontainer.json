@@ -1,6 +1,7 @@
 {
   "name": "terraform-codespace",
   "settings": {
+    "workbench.colorTheme": "Default High Contrast",
     "[terraform]": {
         "editor.formatOnSave": true
     }
