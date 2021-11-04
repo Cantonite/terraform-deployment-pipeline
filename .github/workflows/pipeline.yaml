@@ -51,6 +51,8 @@ jobs:
 
   deploy-development:
     uses: Cantonite/terraform-deployment-pipeline/.github/workflows/terraform-deploy.yaml@main
+    with:
+      environment: development
     secrets:
       terraform_api_token: ${{ secrets.TF_API_TOKEN }}
     needs:

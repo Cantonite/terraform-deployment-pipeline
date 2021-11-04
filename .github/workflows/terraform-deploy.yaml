@@ -2,6 +2,11 @@ name: Terraform Deployment
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        description: The name of the environment being deployed to
+        required: false
+        type: string
     secrets:
         terraform_api_token:
           required: false
@@ -11,7 +16,7 @@ jobs:
     name: Deploy Development
     runs-on: ubuntu-latest
     env:
-      TF_WORKSPACE: development
+      TF_WORKSPACE: ${{ inputs.environment }}
       TF_IN_AUTOMATION: true
     environment:
       name: development
