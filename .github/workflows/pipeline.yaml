@@ -49,7 +49,7 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
-  apply-with-reuse:
+  deploy-development:
     uses: Cantonite/terraform-deployment-pipeline/.github/workflows/terraform-deploy.yaml@main
     needs:
       - ci
