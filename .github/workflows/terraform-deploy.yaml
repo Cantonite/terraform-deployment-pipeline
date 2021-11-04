@@ -12,27 +12,27 @@ on:
           required: false
 
 jobs:
-  deploy-development:
-    name: Deploy Development
+  deploy-terraform:
+    name: Deploy ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
       TF_WORKSPACE: ${{ inputs.environment }}
       TF_IN_AUTOMATION: true
     environment:
-      name: development
-      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-development
+      name: ${{ inputs.environment }}
+      url: https://app.terraform.io/app/Cantonite/workspaces/terraform-deployment-pipeline-${{ inputs.environment }}
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
         with:
-          name: development-terraform-build
+          name: ${{ inputs.environment }}-terraform-build
       - name: Extract Tar
         id: tar
-        run: tar -xvf development.tar
+        run: tar -xvf ${{ inputs.environment }}.tar
       - run: ls -Rla
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.terraform_api_token }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -input=false development.tfplan
+        run: terraform apply -input=false ${{ inputs.environment }}.tfplan
