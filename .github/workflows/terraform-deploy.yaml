@@ -29,7 +29,6 @@ jobs:
       - name: Extract Tar
         id: tar
         run: tar -xvf ${{ inputs.environment }}.tar
-      - run: ls -Rla
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.terraform_api_token }}
